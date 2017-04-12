@@ -1,0 +1,194 @@
+<section>
+  <h2>Writing a Chat Application in <small>(less than)</small> 50 <small>(readable!)</small> Lines!</h2>
+  <h3>Joel Berger</h3>
+</section>
+
+<section>
+
+  <h2>About this talk</h2>
+
+  <ul>
+    <li>I first gave this talk at Chicago Vue.js on April 12, 2017</li>
+    <!-- <li>I updated it on July 23, 2015 for Chicago.pm</li> -->
+    <li>The talk is hosted at <a href="http://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
+    <li>The source is available at <a href="https://github.com/jberger/VueChat" target="_blank">https://github.com/jberger/VueChat</a></li>
+    <li>All code samples and all tests:
+      <ul>
+        <li>are complete and run as shown</li>
+        <li>are included in the repository</li>
+      </ul>
+    </li>
+    <li>This presentation is a Mojolicious app!
+      <ul><li>Using <a href="http://metacpan.org/pod/Mojolicious::Plugin::RevealJS">Mojolicious::Plugin::RevealJS</a></li><ul>
+    </li>
+  </ul>
+
+</section>
+
+<section>
+
+  <h2>About me</h2>
+
+  <ul>
+    <li>Ph.D. in Physics</li>
+    <li>Work at ServerCentral</li>
+    <li>That guy that loves Perl</li>
+    <li>On the core development team of Mojolicious</li>
+  </ul>
+
+</section>
+
+<section>
+  <h3>Let's Make a Chat Client</h3>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">WebSocket</a></li>
+    <li>Server Framework (<a href="http://mojolicio.us">Mojolicious</a>)</li>
+    <li>Client Framework (<a href="https://vuejs.org/">Vue.js</a>)</li>
+    <li>Message Broker (<a href="https://www.postgresql.org/">PostgreSQL</a>)</li>
+    <li>Keep it small</li>
+    <li>Build it incrementally</li>
+  </ul>
+</section>
+
+<section>
+
+  <section>
+    <h2>What is Mojolicious?</h2>
+
+    <img src="noraptor.png">
+
+    <ul>
+      <li>An amazing real-time web framework</li>
+      <li>A powerful web development toolkit</li>
+      <li>Designed from the ground up</li>
+      <li>... based on years of experience developing Catalyst</li>
+    </ul>
+  </section>
+
+  <section>
+    <ul>
+      <li>Portable</li>
+      <li>No non-core dependencies</li>
+      <li>Batteries included</li>
+      <li>Real-time and non-blocking</li>
+      <li>Native Websocket integration</li>
+      <li>8669 lines of code in lib</li>
+      <li>11507 tests (93.5% coverage)</li>
+      <li>Easy to install (secure, only takes one minute!)</li>
+    </ul>
+    <pre><code class="bash">curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Mojolicious</code></pre>
+  </section>
+
+  <section>
+    <h2>Getting Help</h2>
+
+    <img height="200px" style="float: left;" src="failraptor.png">
+
+    <ul>
+      <li><a href="http://mojolicio.us" target="_blank">http://mojolicio.us</a></li>
+      <li><a href="http://mojocasts.com/e1" target="_blank">http://mojocasts.com/e1</a></li>
+      <li><a href="http://chat.mibbit.com/?channel=%23mojo&server=irc.perl.org" target="_blank">#mojo on irc.perl.org</a></li>
+    </ul>
+  </section>
+
+</section>
+
+<section>
+  <section>
+    %= include_code 'ex/mojo_basic_chat.pl'
+  </section>
+
+  <section>
+    %= include_code 'ex/mojo_basic_chat.pl', section => 'websocket'
+  </section>
+
+  <section>
+    %= include_code 'ex/mojo_basic_chat.pl', section => 'chat', language => 'html'
+  </section>
+</section>
+
+<section>
+
+  <section>
+    <h2>Scaling Out</h2>
+  </section>
+
+  <section>
+    <h2>Single Threaded Server</h2>
+    <img src="single_thread.png">
+  </section>
+
+  <section>
+    <h2>Mutli Threaded Server</h2>
+    <img src="multi_thread_broken.png">
+  </section>
+
+  <section>
+    <h2>Multi Threaded Server</h2>
+    <img src="multi_thread_working.png">
+  </section>
+
+</section>
+
+<section>
+
+  <section>
+    <h2>Add a Message Broker</h2>
+  </section>
+
+  <section>
+    %= include_code 'ex/mojo_basic_chat.pl', section => 'websocket'
+  </section>
+
+  <section>
+    %= include_code 'ex/mojo_pg_chat.pl', section => 'websocket'
+  </section>
+
+</section>
+
+<section>
+
+  <section>
+    <h2>Substitute Vue.js</h2>
+  </section>
+
+  <section>
+    %= include_code 'ex/mojo_basic_chat.pl', section => 'chat', language => 'html'
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat.pl', section => 'chat', language => 'html'
+  </section>
+
+</section>
+
+<section>
+
+  <section>
+    <h2>Add a Feature (username)</h2>
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat_user.pl', section => 'chat', language => 'html'
+  </section>
+
+</section>
+
+<section>
+  <section>
+    <h2>Finally</h2>
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat_user.pl'
+  </section>
+
+  <section>
+    <p>That's 42 lines</p>
+  </section>
+
+  <section>
+    <h3>Thank you!</h3>
+    <h3>Any Questions?</h3>
+  </section>
+</section>

@@ -108,6 +108,9 @@
   </section>
 </section>
 
+  <section>
+    %= include_code 'ex/mojo_basic_chat.t'
+  </section>
 <section>
 
   <section>

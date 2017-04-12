@@ -131,9 +131,20 @@
 </section>
 
 <section>
+  <h2>PostgreSQL Database</h2>
+
+  <ul>
+    <li>"The world's most advanced open source database"</li>
+    <li>Lots of nice features, including ...</li>
+    <li>Native JSON types (competitive with nosql)</li>
+    <li>Message broker capability</li>
+  </ul>
+</section>
+
+<section>
 
   <section>
-    <h2>Add a Message Broker</h2>
+    <h2>Add a Postgres Message Broker</h2>
   </section>
 
   <section>
@@ -144,6 +155,31 @@
     %= include_code 'ex/mojo_pg_chat.pl', section => 'websocket'
   </section>
 
+</section>
+
+<section>
+  <section>
+    <h2>Front End Framework</h2>
+  </section>
+
+  <section>
+    <h2>Why?</h2>
+    <ul>
+      <li>DOM binding/updating</li>
+      <li>Composable/reusabled components</li>
+      <li>Separation of concerns</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Vue.js</h2>
+    <ul>
+      <li>Shallow learning curve</li>
+      <li>Unobtrusive (gradual inclusion)</li>
+      <li>DOM binding is automatic</li>
+      <li>Great documentation</li>
+    </ul>
+  </section>
 </section>
 
 <section>

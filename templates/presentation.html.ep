@@ -10,8 +10,9 @@
   <ul>
     <li>I first gave this talk at Chicago Vue.js on April 12, 2017</li>
     <!-- <li>I updated it on July 23, 2015 for Chicago.pm</li> -->
-    <li>The talk is hosted at <a href="http://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
+    <li>The talk is hosted at <a href="https://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
     <li>The source is available at <a href="https://github.com/jberger/VueChat" target="_blank">https://github.com/jberger/VueChat</a></li>
+    <li>Live demos will be served from <a href="https://demo.jberger.pl" target="_blank">https://demo.jberger.pl</a> when available</li>
     <li>All code samples and all tests:
       <ul>
         <li>are complete and run as shown</li>
@@ -19,7 +20,7 @@
       </ul>
     </li>
     <li>This presentation is a Mojolicious app!
-      <ul><li>Using <a href="http://metacpan.org/pod/Mojolicious::Plugin::RevealJS">Mojolicious::Plugin::RevealJS</a></li><ul>
+      <ul><li>Using <a href="https://metacpan.org/pod/Mojolicious::Plugin::RevealJS">Mojolicious::Plugin::RevealJS</a></li><ul>
     </li>
   </ul>
 

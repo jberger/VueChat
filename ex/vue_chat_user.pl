@@ -34,21 +34,21 @@ __DATA__
   </div>
 </div>
 <script>
-  var ws = new WebSocket('<%= url_for('channel')->to_abs %>');
-  var vm = new Vue({
-    el: '#chat',
-    data: {
-      current: '',
-      messages: [],
-      username: '',
+var ws = new WebSocket('<%= url_for('channel')->to_abs %>');
+var vm = new Vue({
+  el: '#chat',
+  data: {
+    current: '',
+    messages: [],
+    username: '',
+  },
+  methods: {
+    send: function() {
+      var data = {username: this.username, message: this.current};
+      ws.send(JSON.stringify(data));
+      this.current = '';
     },
-    methods: {
-      send: function() {
-        var data = {username: this.username, message: this.current};
-        ws.send(JSON.stringify(data));
-        this.current = '';
-      },
-    },
-  });
-  ws.onmessage = function (e) { vm.messages.push(JSON.parse(e.data)) };
+  },
+});
+ws.onmessage = function (e) { vm.messages.push(JSON.parse(e.data)) };
 </script>

@@ -9,7 +9,7 @@
 
   <ul>
     <li>I first gave this talk at Chicago Vue.js on April 12, 2017</li>
-    <!-- <li>I updated it on July 23, 2015 for Chicago.pm</li> -->
+    <li>I updated it on June 19, 2017 for The Perl Conferene</li>
     <li>The talk is hosted at <a href="https://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
     <li>The source is available at <a href="https://github.com/jberger/VueChat" target="_blank">https://github.com/jberger/VueChat</a></li>
     <li>Live demos will be served from <a href="https://demo.jberger.pl" target="_blank">https://demo.jberger.pl</a> when available</li>
@@ -34,6 +34,7 @@
     <li>Ph.D. in Physics</li>
     <li>Work at ServerCentral</li>
     <li>That guy that loves Perl</li>
+    <li>That guy that is learning to tolerate JS</li>
     <li>On the core development team of Mojolicious</li>
   </ul>
 
@@ -47,6 +48,7 @@
     <li>Client Framework (<a href="https://vuejs.org/">Vue.js</a>)</li>
     <li>Message Broker (<a href="https://www.postgresql.org/">PostgreSQL</a>)</li>
     <li>Keep it small</li>
+    <li>Use experimental signatures</li>
     <li>Build it incrementally</li>
   </ul>
 </section>
@@ -224,7 +226,8 @@
   </section>
 
   <section>
-    <p>That's 42 lines</p>
+    <p>That's 45 lines</p>
+    <p>(generated using David A. Wheeler's 'SLOCCount')</p>
   </section>
 
   <section>

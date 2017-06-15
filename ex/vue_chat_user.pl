@@ -29,7 +29,9 @@ __DATA__
 <div id="chat">
   Username: <input v-model="username"><br>
   Send: <input @keydown.enter="send" v-model="current"><br>
-  <div id="log"><p v-for="m in messages">{{m.username}}: {{m.message}}</p></div>
+  <div id="log">
+    <p v-for="m in messages">{{m.username}}: {{m.message}}</p>
+  </div>
 </div>
 <script>
   var ws = new WebSocket('<%= url_for('channel')->to_abs %>');
@@ -42,7 +44,8 @@ __DATA__
     },
     methods: {
       send: function() {
-        ws.send(JSON.stringify({username: this.username, message: this.current}));
+        var data = {username: this.username, message: this.current};
+        ws.send(JSON.stringify(data));
         this.current = '';
       },
     },

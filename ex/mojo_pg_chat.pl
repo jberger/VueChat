@@ -20,7 +20,9 @@ websocket '/channel' => sub ($c) {
   $c->pg->pubsub->listen(mojochat => $cb);
 
   # Remove callback from PG listeners on close
-  $c->on(finish => sub ($c, @) { $c->pg->pubsub->unlisten(mojochat => $cb) });
+  $c->on(finish => sub ($c, @) {
+    $c->pg->pubsub->unlisten(mojochat => $cb);
+  });
 };
 # reveal end websocket
 

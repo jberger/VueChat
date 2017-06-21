@@ -95,8 +95,8 @@
       <li>Batteries included</li>
       <li>Real-time and non-blocking</li>
       <li>Native Websocket integration</li>
-      <li>8669 lines of code in lib</li>
-      <li>11507 tests (93.5% coverage)</li>
+      <li>8711 lines of code in lib</li>
+      <li>11512 tests (94.1% coverage)</li>
       <li>Easy to install (secure, only takes one minute!)</li>
     </ul>
     <pre><code class="bash">curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Mojolicious</code></pre>
@@ -246,7 +246,7 @@
   </section>
 
   <section>
-    <p>That's 45 lines</p>
+    <p>That's 47 lines</p>
     <p>(generated using David A. Wheeler's 'SLOCCount')</p>
   </section>
 

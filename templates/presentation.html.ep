@@ -8,11 +8,11 @@
   <h2>About this talk</h2>
 
   <ul>
-    <li>I first gave this talk at Chicago Vue.js on April 12, 2017</li>
-    <li>I updated it on June 19, 2017 for The Perl Conferene</li>
-    <li>The talk is hosted at <a href="https://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
-    <li>The source is available at <a href="https://github.com/jberger/VueChat" target="_blank">https://github.com/jberger/VueChat</a></li>
-    <li>Live demos will be served from <a href="https://demo.jberger.pl" target="_blank">https://demo.jberger.pl</a> when available</li>
+    <li>First given at Chicago Vue.js on April 12, 2017</li>
+    <li>Last updated June 21, 2017 for The Perl Conference</li>
+    <li>Follow along <a href="https://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
+    <li>Source <a href="https://github.com/jberger/VueChat" target="_blank">https://github.com/jberger/VueChat</a></li>
+    <li>Live demos <a href="https://demo.jberger.pl" target="_blank">https://demo.jberger.pl</a> when available</li>
     <li>All code samples and all tests:
       <ul>
         <li>are complete and run as shown</li>
@@ -27,6 +27,16 @@
 </section>
 
 <section>
+  <h2>Thank You</h2>
+
+  <a href="https://servercentral.com">
+      <img src="sclogo.svg" style="background: white;">
+  </a>
+
+  <a href="https://servercentral.com">servercentral.com</a>
+</section>
+
+<section>
 
   <h2>About me</h2>
 
@@ -34,6 +44,7 @@
     <li>Ph.D. in Physics</li>
     <li>Work at ServerCentral</li>
     <li>That guy that loves Perl</li>
+    <li>That guy that loves PostgreSQL</li>
     <li>That guy that is learning to tolerate JS</li>
     <li>On the core development team of Mojolicious</li>
   </ul>
@@ -50,6 +61,15 @@
     <li>Keep it small</li>
     <li>Use experimental signatures</li>
     <li>Build it incrementally</li>
+  </ul>
+</section>
+
+<section>
+  <h3>Intentions</h3>
+  <ul>
+    <li>Minimal working code</li>
+    <li>Not the best code</li>
+    <li>Show how the components interact</li>
   </ul>
 </section>
 
@@ -125,12 +145,12 @@
   </section>
 
   <section>
-    <h2>Mutli Threaded Server</h2>
+    <h2>Mutli-process Server</h2>
     <img src="multi_thread_broken.png">
   </section>
 
   <section>
-    <h2>Multi Threaded Server</h2>
+    <h2>Multi-process Server</h2>
     <img src="multi_thread_working.png">
   </section>
 
@@ -234,4 +254,33 @@
     <h3>Thank you!</h3>
     <h3>Any Questions?</h3>
   </section>
+</section>
+
+<section>
+
+  <section>
+    <h2>Vue Components</h2>
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat_comp.pl', section => 'message', language => 'javascript'
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat_comp.pl', section => 'entry', language => 'javascript'
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat_comp.pl', section => 'template', language => 'html'
+  </section>
+
+  <section>
+    %= include_code 'ex/vue_chat_comp.pl', section => 'app', language => 'javascript'
+  </section>
+
+  <section>
+    <h3>Finally</h3>
+    %= include_code 'ex/vue_chat_comp.pl'
+  </section>
+
 </section>

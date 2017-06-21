@@ -145,7 +145,7 @@
   </section>
 
   <section>
-    <h2>Mutli-process Server</h2>
+    <h2>Multi-process Server</h2>
     <img src="multi_thread_broken.png">
   </section>
 

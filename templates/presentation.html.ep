@@ -59,7 +59,6 @@
     <li>Client Framework (<a href="https://vuejs.org/">Vue.js</a>)</li>
     <li>Message Broker (<a href="https://www.postgresql.org/">PostgreSQL</a>)</li>
     <li>Keep it small</li>
-    <li>Use experimental signatures</li>
     <li>Build it incrementally</li>
   </ul>
 </section>
@@ -246,8 +245,8 @@
   </section>
 
   <section>
-    <p>That's 47 lines</p>
-    <p>(generated using David A. Wheeler's 'SLOCCount')</p>
+    <h2>That's 46 lines</h2>
+    <p><small>(generated using David A. Wheeler's 'SLOCCount')</small></p>
   </section>
 
   <section>

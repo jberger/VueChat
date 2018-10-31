@@ -1,6 +1,5 @@
-use Mojolicious::Lite;
+use Mojolicious::Lite -signatures;
 use Mojo::Pg;
-use experimental 'signatures';
 
 helper pg => sub { state $pg = Mojo::Pg->new('postgresql://test:test@/test') };
 

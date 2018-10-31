@@ -1,5 +1,4 @@
-use Mojolicious::Lite;
-use experimental 'signatures';
+use Mojolicious::Lite -signatures;
 
 get '/' => 'chat';
 

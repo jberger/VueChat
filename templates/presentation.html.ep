@@ -20,7 +20,7 @@
       </ul>
     </li>
     <li>This presentation is a Mojolicious app!
-      <ul><li>Using <a href="https://metacpan.org/pod/Mojolicious::Plugin::RevealJS">Mojolicious::Plugin::RevealJS</a></li><ul>
+      <ul><li>Using <a href="https://metacpan.org/pod/Mojolicious::Plugin::RevealJS">Mojolicious::Plugin::RevealJS</a></li></ul>
     </li>
   </ul>
 

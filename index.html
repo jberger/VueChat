@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head><base href="/VueChat/">
+    
+    
+    
+		<meta charset="utf-8">
+
+    <title></title>
+
+    <meta content="defies description" name="description">
+    <meta content="somebody pretty cool" name="author">
+
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+		<link href="revealjs/css/reveal.css" rel="stylesheet">
+    
+    <link href="revealjs/css/theme/black.css" id="theme" rel="stylesheet">
+
+		<!-- Theme used for syntax highlighting of code -->
+    <link href="revealjs/lib/css/zenburn.css" rel="stylesheet">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'revealjs/css/print/pdf.css' : 'revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="revealjs/lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+    
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+        <section>
+  <h2>Writing a Chat Application in <small>(less than)</small> 50 <small>(readable!)</small> Lines!</h2>
+  <h3>Joel Berger</h3>
+</section>
+
+<section>
+
+  <h2>About this talk</h2>
+
+  <ul>
+    <li>First given at Chicago Vue.js on April 12, 2017</li>
+    <li>Last updated June 21, 2017 for The Perl Conference</li>
+    <li>Follow along <a href="https://jberger.github.io/VueChat" target="_blank">http://jberger.github.io/VueChat</a></li>
+    <li>Source <a href="https://github.com/jberger/VueChat" target="_blank">https://github.com/jberger/VueChat</a></li>
+    <li>Live demos <a href="https://demo.jberger.pl" target="_blank">https://demo.jberger.pl</a> when available</li>
+    <li>All code samples and all tests:
+      <ul>
+        <li>are complete and run as shown</li>
+        <li>are included in the repository</li>
+      </ul>
+    </li>
+    <li>This presentation is a Mojolicious app!
+      <ul><li>Using <a href="https://metacpan.org/pod/Mojolicious::Plugin::RevealJS">Mojolicious::Plugin::RevealJS</a></li></ul>
+    </li>
+  </ul>
+
+</section>
+
+<section>
+  <h2>Thank You</h2>
+
+  <a href="https://servercentral.com">
+      <img src="img/sclogo.svg" style="background: white;">
+  </a>
+
+  <a href="https://servercentral.com">servercentral.com</a>
+</section>
+
+<section>
+
+  <h2>About me</h2>
+
+  <ul>
+    <li>Ph.D. in Physics</li>
+    <li>Work at ServerCentral</li>
+    <li>That guy that loves Perl</li>
+    <li>That guy that loves PostgreSQL</li>
+    <li>That guy that is learning to tolerate JS</li>
+    <li>On the core development team of Mojolicious</li>
+  </ul>
+
+</section>
+
+<section>
+  <h3>Let&#39;s Make a Chat Client</h3>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">WebSocket</a></li>
+    <li>Server Framework (<a href="http://mojolicio.us">Mojolicious</a>)</li>
+    <li>Client Framework (<a href="https://vuejs.org/">Vue.js</a>)</li>
+    <li>Message Broker (<a href="https://www.postgresql.org/">PostgreSQL</a>)</li>
+    <li>Keep it small</li>
+    <li>Build it incrementally</li>
+  </ul>
+</section>
+
+<section>
+  <h3>Intentions</h3>
+  <ul>
+    <li>Minimal working code</li>
+    <li>Not the best code</li>
+    <li>Show how the components interact</li>
+  </ul>
+</section>
+
+<section>
+
+  <section>
+    <h2>What is Mojolicious?</h2>
+
+    <img src="img/noraptor.png">
+
+    <ul>
+      <li>An amazing real-time web framework</li>
+      <li>A powerful web development toolkit</li>
+      <li>Designed from the ground up</li>
+      <li>... based on years of experience developing Catalyst</li>
+    </ul>
+  </section>
+
+  <section>
+    <ul>
+      <li>Portable</li>
+      <li>No non-core dependencies</li>
+      <li>Batteries included</li>
+      <li>Real-time and non-blocking</li>
+      <li>Native Websocket integration</li>
+      <li>8711 lines of code in lib</li>
+      <li>11512 tests (94.1% coverage)</li>
+      <li>Easy to install (secure, only takes one minute!)</li>
+    </ul>
+    <pre><code class="bash">curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Mojolicious</code></pre>
+  </section>
+
+  <section>
+    <h2>Getting Help</h2>
+
+    <img height="200px" src="img/failraptor.png" style="float: left;">
+
+    <ul>
+      <li><a href="http://mojolicio.us" target="_blank">http://mojolicio.us</a></li>
+      <li><a href="http://mojocasts.com/e1" target="_blank">http://mojocasts.com/e1</a></li>
+      <li><a href="http://chat.mibbit.com/?channel=%23mojo&amp;server=irc.perl.org" target="_blank">#mojo on irc.perl.org</a></li>
+    </ul>
+  </section>
+
+</section>
+
+<section>
+  <section>
+        <pre><code class="perl" data-trim>
+use Mojolicious::Lite -signatures;
+
+get &#39;/&#39; =&gt; &#39;chat&#39;;
+
+my %subscribers;
+
+websocket &#39;/channel&#39; =&gt; sub ($c) {
+  $c-&gt;inactivity_timeout(3600);
+
+  # Add controller to hash of subscribers
+  $subscribers{$c} = $c;
+
+  # Forward messages from the browser to all subscribers
+  $c-&gt;on(message =&gt; sub ($c, $message) {
+    $_-&gt;send($message) for values %subscribers;
+  });
+
+  # Remove controller from subscribers on close
+  $c-&gt;on(finish =&gt; sub ($c, @) { delete $subscribers{$c} });
+};
+
+app-&gt;start;
+__DATA__
+
+@@ chat.html.ep
+&lt;form onsubmit=&quot;sendChat(this.children[0]); return false&quot;&gt;&lt;input&gt;&lt;/form&gt;
+&lt;div id=&quot;log&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+var ws  = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+ws.onmessage = function (e) {
+  document.getElementById(&#39;log&#39;).innerHTML += &#39;&lt;p&gt;&#39; + e.data + &#39;&lt;/p&gt;&#39;;
+};
+function sendChat(input) { ws.send(input.value); input.value = &#39;&#39; }
+&lt;/script&gt;
+    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_basic_chat.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="perl" data-trim>
+websocket &#39;/channel&#39; =&gt; sub ($c) {
+  $c-&gt;inactivity_timeout(3600);
+
+  # Add controller to hash of subscribers
+  $subscribers{$c} = $c;
+
+  # Forward messages from the browser to all subscribers
+  $c-&gt;on(message =&gt; sub ($c, $message) {
+    $_-&gt;send($message) for values %subscribers;
+  });
+
+  # Remove controller from subscribers on close
+  $c-&gt;on(finish =&gt; sub ($c, @) { delete $subscribers{$c} });
+};    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_basic_chat.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="html" data-trim>
+&lt;form onsubmit=&quot;sendChat(this.children[0]); return false&quot;&gt;&lt;input&gt;&lt;/form&gt;
+&lt;div id=&quot;log&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+var ws  = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+ws.onmessage = function (e) {
+  document.getElementById(&#39;log&#39;).innerHTML += &#39;&lt;p&gt;&#39; + e.data + &#39;&lt;/p&gt;&#39;;
+};
+function sendChat(input) { ws.send(input.value); input.value = &#39;&#39; }
+&lt;/script&gt;    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_basic_chat.pl</p>
+
+  </section>
+</section>
+
+  <section>
+        <pre><code class="perl" data-trim>
+use Mojo::Base -strict;
+
+use Test::More;
+use Test::Mojo;
+
+require &#39;./ex/mojo_basic_chat.pl&#39;;
+
+my $t = Test::Mojo-&gt;new;
+
+$t-&gt;get_ok(&#39;/&#39;)-&gt;status_is(200);
+
+$t-&gt;websocket_ok(&#39;/channel&#39;)
+  -&gt;send_ok(&#39;is this thing on?&#39;)
+  -&gt;message_ok
+  -&gt;message_is(&#39;is this thing on?&#39;)
+  -&gt;finish_ok;
+
+done_testing;
+    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_basic_chat.t</p>
+
+  </section>
+<section>
+
+  <section>
+    <h2>Scaling Out</h2>
+  </section>
+
+  <section>
+    <h2>Single Threaded Server</h2>
+    <img src="img/single_thread.png">
+  </section>
+
+  <section>
+    <h2>Multi-process Server</h2>
+    <img src="img/multi_thread_broken.png">
+  </section>
+
+  <section>
+    <h2>Multi-process Server</h2>
+    <img src="img/multi_thread_working.png">
+  </section>
+
+</section>
+
+<section>
+  <h2>PostgreSQL Database</h2>
+
+  <ul>
+    <li>&quot;The world&#39;s most advanced open source database&quot;</li>
+    <li>Lots of nice features, including ...</li>
+    <li>Native JSON types (competitive with nosql)</li>
+    <li>Message broker capability</li>
+  </ul>
+</section>
+
+<section>
+
+  <section>
+    <h2>Add a Postgres Message Broker</h2>
+  </section>
+
+  <section>
+        <pre><code class="perl" data-trim>
+websocket &#39;/channel&#39; =&gt; sub ($c) {
+  $c-&gt;inactivity_timeout(3600);
+
+  # Add controller to hash of subscribers
+  $subscribers{$c} = $c;
+
+  # Forward messages from the browser to all subscribers
+  $c-&gt;on(message =&gt; sub ($c, $message) {
+    $_-&gt;send($message) for values %subscribers;
+  });
+
+  # Remove controller from subscribers on close
+  $c-&gt;on(finish =&gt; sub ($c, @) { delete $subscribers{$c} });
+};    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_basic_chat.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="perl" data-trim>
+helper pg =&gt; sub { state $pg = Mojo::Pg-&gt;new(&#39;postgresql://test:test@/test&#39;) };
+
+websocket &#39;/channel&#39; =&gt; sub ($c) {
+  $c-&gt;inactivity_timeout(3600);
+
+  # Forward messages from the browser to PostgreSQL
+  $c-&gt;on(message =&gt; sub ($c, $message) {
+    $c-&gt;pg-&gt;pubsub-&gt;notify(mojochat =&gt; $message);
+  });
+
+  # Forward messages from PostgreSQL to the browser
+  my $cb = sub ($pubsub, $message) { $c-&gt;send($message) };
+  $c-&gt;pg-&gt;pubsub-&gt;listen(mojochat =&gt; $cb);
+
+  # Remove callback from PG listeners on close
+  $c-&gt;on(finish =&gt; sub ($c, @) {
+    $c-&gt;pg-&gt;pubsub-&gt;unlisten(mojochat =&gt; $cb);
+  });
+};    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_pg_chat.pl</p>
+
+  </section>
+
+</section>
+
+<section>
+  <section>
+    <h2>Front End Framework</h2>
+  </section>
+
+  <section>
+    <h2>Why?</h2>
+    <ul>
+      <li>DOM binding/updating</li>
+      <li>Composable/reusabled components</li>
+      <li>Separation of concerns</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Vue.js</h2>
+    <ul>
+      <li>Shallow learning curve</li>
+      <li>Unobtrusive (gradual inclusion)</li>
+      <li>DOM binding is automatic</li>
+      <li>Great documentation</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+
+  <section>
+    <h2>Substitute Vue.js</h2>
+  </section>
+
+  <section>
+        <pre><code class="html" data-trim>
+&lt;form onsubmit=&quot;sendChat(this.children[0]); return false&quot;&gt;&lt;input&gt;&lt;/form&gt;
+&lt;div id=&quot;log&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+var ws  = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+ws.onmessage = function (e) {
+  document.getElementById(&#39;log&#39;).innerHTML += &#39;&lt;p&gt;&#39; + e.data + &#39;&lt;/p&gt;&#39;;
+};
+function sendChat(input) { ws.send(input.value); input.value = &#39;&#39; }
+&lt;/script&gt;    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/mojo_basic_chat.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="html" data-trim>
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;chat&quot;&gt;
+  &lt;form @submit.prevent=&quot;send&quot;&gt;&lt;input v-model=&quot;current&quot;&gt;&lt;/form&gt;
+  &lt;div id=&quot;log&quot;&gt;&lt;p v-for=&quot;m in messages&quot;&gt;{{m}}&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+var ws = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+var vm = new Vue({
+  el: &#39;#chat&#39;,
+  data: {
+    current: &#39;&#39;,
+    messages: [],
+  },
+  methods: {
+    send: function() {
+      ws.send(this.current);
+      this.current = &#39;&#39;;
+    },
+  },
+});
+ws.onmessage = function (e) { vm.messages.push(e.data) };
+&lt;/script&gt;    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat.pl</p>
+
+  </section>
+
+</section>
+
+<section>
+
+  <section>
+    <h2>Add a Feature (username)</h2>
+  </section>
+
+  <section>
+        <pre><code class="html" data-trim>
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;chat&quot;&gt;
+  Username: &lt;input v-model=&quot;username&quot;&gt;&lt;br&gt;
+  Send: &lt;input @keydown.enter=&quot;send&quot; v-model=&quot;current&quot;&gt;&lt;br&gt;
+  &lt;div id=&quot;log&quot;&gt;
+    &lt;p v-for=&quot;m in messages&quot;&gt;{{m.username}}: {{m.message}}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+var ws = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+var vm = new Vue({
+  el: &#39;#chat&#39;,
+  data: {
+    current: &#39;&#39;,
+    messages: [],
+    username: &#39;&#39;,
+  },
+  methods: {
+    send: function() {
+      var data = {username: this.username, message: this.current};
+      ws.send(JSON.stringify(data));
+      this.current = &#39;&#39;;
+    },
+  },
+});
+ws.onmessage = function (e) { vm.messages.push(JSON.parse(e.data)) };
+&lt;/script&gt;    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_user.pl</p>
+
+  </section>
+
+</section>
+
+<section>
+  <section>
+    <h2>Finally</h2>
+  </section>
+
+  <section>
+        <pre><code class="perl" data-trim>
+use Mojolicious::Lite -signatures;
+use Mojo::Pg;
+
+helper pg =&gt; sub { state $pg = Mojo::Pg-&gt;new(&#39;postgresql://test:test@/test&#39;) };
+
+get &#39;/&#39; =&gt; &#39;chat&#39;;
+
+websocket &#39;/channel&#39; =&gt; sub ($c) {
+  $c-&gt;inactivity_timeout(3600);
+
+  # Forward messages from the browser to PostgreSQL
+  $c-&gt;on(message =&gt; sub ($c, $message) {
+    $c-&gt;pg-&gt;pubsub-&gt;notify(mojochat =&gt; $message);
+  });
+
+  # Forward messages from PostgreSQL to the browser
+  my $cb = sub ($pubsub, $message) { $c-&gt;send($message) };
+  $c-&gt;pg-&gt;pubsub-&gt;listen(mojochat =&gt; $cb);
+
+  # Remove callback from PG listeners on close
+  $c-&gt;on(finish =&gt; sub ($c, @) {
+    $c-&gt;pg-&gt;pubsub-&gt;unlisten(mojochat =&gt; $cb);
+  });
+};
+
+app-&gt;start;
+__DATA__
+
+@@ chat.html.ep
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;chat&quot;&gt;
+  Username: &lt;input v-model=&quot;username&quot;&gt;&lt;br&gt;
+  Send: &lt;input @keydown.enter=&quot;send&quot; v-model=&quot;current&quot;&gt;&lt;br&gt;
+  &lt;div id=&quot;log&quot;&gt;
+    &lt;p v-for=&quot;m in messages&quot;&gt;{{m.username}}: {{m.message}}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+var ws = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+var vm = new Vue({
+  el: &#39;#chat&#39;,
+  data: {
+    current: &#39;&#39;,
+    messages: [],
+    username: &#39;&#39;,
+  },
+  methods: {
+    send: function() {
+      var data = {username: this.username, message: this.current};
+      ws.send(JSON.stringify(data));
+      this.current = &#39;&#39;;
+    },
+  },
+});
+ws.onmessage = function (e) { vm.messages.push(JSON.parse(e.data)) };
+&lt;/script&gt;
+    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_user.pl</p>
+
+  </section>
+
+  <section>
+    <h2>That&#39;s 46 lines</h2>
+    <p><small>(generated using David A. Wheeler&#39;s &#39;SLOCCount&#39;)</small></p>
+  </section>
+
+  <section>
+    <h3>Thank you!</h3>
+    <h3>Any Questions?</h3>
+  </section>
+</section>
+
+<section>
+
+  <section>
+    <h2>Vue Components</h2>
+  </section>
+
+  <section>
+        <pre><code class="javascript" data-trim>
+Vue.component(&#39;chat-msg&#39;, {
+  template: &#39;&lt;p&gt;{{username}}: {{message}}&lt;/p&gt;&#39;,
+  props: {
+    username: { type: String, required: true },
+    message:  { type: String, default: &#39;&#39; },
+  },
+});    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_comp.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="javascript" data-trim>
+Vue.component(&#39;chat-entry&#39;, {
+  template: &#39;&lt;input @keydown.enter=&quot;message&quot; v-model=&quot;current&quot;&gt;&#39;,
+  data: function() { return { current: &#39;&#39; } },
+  methods: {
+    message: function() {
+      this.$emit(&#39;message&#39;, this.current);
+      this.current = &#39;&#39;;
+    },
+  },
+});    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_comp.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="html" data-trim>
+&lt;div id=&quot;chat&quot;&gt;
+  Username: &lt;input v-model=&quot;username&quot;&gt;&lt;br&gt;
+  Send: &lt;chat-entry @message=&quot;send&quot;&gt;&lt;/chat-entry&gt;&lt;br&gt;
+  &lt;div id=&quot;log&quot;&gt;
+    &lt;chat-msg v-for=&quot;m in messages&quot; :username=&quot;m.username&quot; :message=&quot;m.message&quot;&gt;&lt;/chat-msg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_comp.pl</p>
+
+  </section>
+
+  <section>
+        <pre><code class="javascript" data-trim>
+var vm = new Vue({
+  el: &#39;#chat&#39;,
+  data: { messages: [], username: &#39;&#39;, ws: null },
+  methods: {
+    connect: function() {
+      var self = this;
+      self.ws = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+      self.ws.onmessage = function (e) { self.messages.push(JSON.parse(e.data)) };
+    },
+    send: function(message) {
+      var data = {username: this.username, message: message};
+      this.ws.send(JSON.stringify(data));
+    },
+  },
+  created: function() { this.connect() },
+});    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_comp.pl</p>
+
+  </section>
+
+  <section>
+    <h3>Finally</h3>
+        <pre><code class="perl" data-trim>
+use Mojolicious::Lite -signatures;
+use Mojo::Pg;
+
+helper pg =&gt; sub { state $pg = Mojo::Pg-&gt;new(&#39;postgresql://test:test@/test&#39;) };
+
+get &#39;/&#39; =&gt; &#39;chat&#39;;
+
+websocket &#39;/channel&#39; =&gt; sub ($c) {
+  $c-&gt;inactivity_timeout(3600);
+
+  # Forward messages from the browser to PostgreSQL
+  $c-&gt;on(message =&gt; sub ($c, $message) {
+    $c-&gt;pg-&gt;pubsub-&gt;notify(mojochat =&gt; $message);
+  });
+
+  # Forward messages from PostgreSQL to the browser
+  my $cb = sub ($pubsub, $message) { $c-&gt;send($message) };
+  $c-&gt;pg-&gt;pubsub-&gt;listen(mojochat =&gt; $cb);
+
+  # Remove callback from PG listeners on close
+  $c-&gt;on(finish =&gt; sub ($c, @) {
+    $c-&gt;pg-&gt;pubsub-&gt;unlisten(mojochat =&gt; $cb);
+  });
+};
+
+app-&gt;start;
+__DATA__
+
+@@ chat.html.ep
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;chat&quot;&gt;
+  Username: &lt;input v-model=&quot;username&quot;&gt;&lt;br&gt;
+  Send: &lt;chat-entry @message=&quot;send&quot;&gt;&lt;/chat-entry&gt;&lt;br&gt;
+  &lt;div id=&quot;log&quot;&gt;
+    &lt;chat-msg v-for=&quot;m in messages&quot; :username=&quot;m.username&quot; :message=&quot;m.message&quot;&gt;&lt;/chat-msg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+Vue.component(&#39;chat-entry&#39;, {
+  template: &#39;&lt;input @keydown.enter=&quot;message&quot; v-model=&quot;current&quot;&gt;&#39;,
+  data: function() { return { current: &#39;&#39; } },
+  methods: {
+    message: function() {
+      this.$emit(&#39;message&#39;, this.current);
+      this.current = &#39;&#39;;
+    },
+  },
+});
+Vue.component(&#39;chat-msg&#39;, {
+  template: &#39;&lt;p&gt;{{username}}: {{message}}&lt;/p&gt;&#39;,
+  props: {
+    username: { type: String, required: true },
+    message:  { type: String, default: &#39;&#39; },
+  },
+});
+var vm = new Vue({
+  el: &#39;#chat&#39;,
+  data: { messages: [], username: &#39;&#39;, ws: null },
+  methods: {
+    connect: function() {
+      var self = this;
+      self.ws = new WebSocket(&#39;&lt;%= url_for(&#39;channel&#39;)-&gt;to_abs %&gt;&#39;);
+      self.ws.onmessage = function (e) { self.messages.push(JSON.parse(e.data)) };
+    },
+    send: function(message) {
+      var data = {username: this.username, message: message};
+      this.ws.send(JSON.stringify(data));
+    },
+  },
+  created: function() { this.connect() },
+});
+&lt;/script&gt;
+    </code></pre>
+    <p class="filename" style="float: right; text-color: white; font-size: small;">ex/vue_chat_comp.pl</p>
+
+  </section>
+
+</section>
+
+			</div>
+
+		</div>
+
+		<script src="revealjs/lib/js/head.min.js"></script>
+		<script src="revealjs/js/reveal.js"></script>
+
+		<script>
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+      
+      var init = {"center":true,"controls":true,"history":true,"progress":true,"transition":"slide"};
+			// Optional reveal.js plugins
+      init.dependencies = [
+        { src: 'revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: 'revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'revealjs/plugin/zoom-js/zoom.js', async: true },
+        { src: 'revealjs/plugin/notes/notes.js', async: true },
+        { src: 'reveal-sampler/sampler.js' }
+      ];
+
+      
+			Reveal.initialize(init);
+
+		</script>
+
+    
+	</body>
+</html>
